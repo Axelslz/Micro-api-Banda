@@ -1,5 +1,6 @@
 from src.domain.port.musician_port import MusicianRepository
-from src.database.mysql.models import Musician, db
+from src.infrastructure.database.mysql.connection import db
+from src.infrastructure.database.mysql.models import Musician
 
 class MusicianRepositoryImpl(MusicianRepository):
     def add(self, musician):

@@ -1,5 +1,6 @@
 from src.domain.entities.musician import Musician
 from src.domain.port.musician_port import MusicianRepository
+from src.infrastructure.rabbitmq.musician_publisher import publish_musician_created
 
 class RegisterMusicianUseCase:
     def __init__(self, repository: MusicianRepository):
@@ -28,6 +29,10 @@ class RegisterMusicianUseCase:
             contact_phone=data.get('contact_phone', None),
             social_links=data.get('social_links', '')
         )
-        
+
         self.repository.add(musician)
+
+        # Publicar mensaje en RabbitMQ
+        publish_musician_created(musician)
+
         return musician
