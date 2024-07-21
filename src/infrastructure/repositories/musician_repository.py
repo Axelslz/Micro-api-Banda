@@ -1,9 +1,11 @@
 from src.domain.port.musician_port import MusicianRepository
+from src.domain.entities.musician import Musician
 from src.infrastructure.database.mysql.connection import db
-from src.infrastructure.database.mysql.models import Musician
 
 class MusicianRepositoryImpl(MusicianRepository):
-    def add(self, musician):
-        new_musician = Musician(name=musician.name, email=musician.email, password=musician.password, phone=musician.phone, location=musician.location, description=musician.description, repertoire=musician.repertoire, experience=musician.experience, videos=musician.videos, photos=musician.photos, contact_name=musician.contact_name, contact_email=musician.contact_email, contact_phone=musician.contact_phone, social_links=musician.social_links)
-        db.session.add(new_musician)
+    def add(self, musician: Musician):
+        db.session.add(musician)
         db.session.commit()
+
+    def find_by_id(self, musician_id):
+        return db.session.query(Musician).filter_by(id=musician_id).first()

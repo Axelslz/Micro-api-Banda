@@ -1,9 +1,10 @@
 import pika
 
-RABBITMQ_URL = 'amqp://localhost'
-
 def connect_rabbitmq():
-    parameters = pika.URLParameters(RABBITMQ_URL)
-    connection = pika.BlockingConnection(parameters)
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
     channel = connection.channel()
     return connection, channel
+
+
+
+

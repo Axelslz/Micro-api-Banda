@@ -1,8 +1,8 @@
-from abc import ABC, abstractmethod
-from src.domain.entities.musician import Musician
+class MusicianRepository:
+    def add(self, musician):
+        raise NotImplementedError
 
-class MusicianRepository(ABC):
-    @abstractmethod
-    def add(self, musician: Musician):
-        pass
+    def find_by_id(self, musician_id):
+        raise NotImplementedError
+
 

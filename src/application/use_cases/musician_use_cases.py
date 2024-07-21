@@ -1,18 +1,12 @@
 from src.domain.entities.musician import Musician
 from src.domain.port.musician_port import MusicianRepository
-from src.infrastructure.rabbitmq.musician_publisher import publish_musician_created
+from src.infrastructure.rabbitmq.musician_publisher import publish_musician_created, publish_musician_request
 
 class RegisterMusicianUseCase:
     def __init__(self, repository: MusicianRepository):
         self.repository = repository
 
-    def execute(self, data: dict) -> Musician:
-        """
-        Execute the use case to register a musician.
-
-        :param data: A dictionary with musician data.
-        :return: The registered Musician entity.
-        """
+    def execute(self, data: dict) -> str:
         musician = Musician(
             name=data['name'],
             email=data['email'],
@@ -31,8 +25,11 @@ class RegisterMusicianUseCase:
         )
 
         self.repository.add(musician)
-
-        # Publicar mensaje en RabbitMQ
         publish_musician_created(musician)
+        return "Músico registrado exitosamente"
 
-        return musician
+class FindMusicianByIdUseCase:
+    @staticmethod
+    def execute(musician_id: int):
+        publish_musician_request(musician_id)
+        return {"message": "Solicitud enviada a RabbitMQ para buscar el músico por ID"}
