@@ -9,3 +9,6 @@ class MusicianRepositoryImpl(MusicianRepository):
 
     def find_by_id(self, musician_id):
         return db.session.query(Musician).filter_by(id=musician_id).first()
+
+    def find_by_email(self, email):
+        return db.session.query(Musician).filter_by(email=email).first()

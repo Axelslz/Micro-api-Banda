@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String
+import uuid
+from sqlalchemy import Column, String, Integer
+from sqlalchemy.dialects.postgresql import UUID
 from src.infrastructure.database.mysql.connection import db
 
 class Musician(db.Model):

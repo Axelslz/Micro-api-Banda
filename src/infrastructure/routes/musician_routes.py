@@ -1,7 +1,8 @@
 from flask import Blueprint
-from src.infrastructure.controllers.musician_controller import register_musician, find_musician_by_id
+from src.infrastructure.controllers.musician_controller import register_musician, find_musician_by_id, login_musician
 
 musician_routes = Blueprint('musician_routes', __name__)
 
 musician_routes.route('/register', methods=['POST'])(register_musician)
-musician_routes.route('/find', methods=['GET'])(find_musician_by_id)
+musician_routes.route('/<string:musician_id>', methods=['GET'])(find_musician_by_id)
+musician_routes.route('/login', methods=['POST'])(login_musician)
