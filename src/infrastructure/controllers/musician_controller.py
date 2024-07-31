@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from src.domain.entities.musician import Musician
 from src.application.use_cases.musician_use_cases import RegisterMusicianUseCase, FindMusicianByIdUseCase
 from src.application.use_cases.login_use_case import LoginMusicianUseCase
 from src.application.use_cases.profile_visit_use_case import ProfileVisitStatsUseCase, RecordProfileVisitUseCase, GetProfileVisitStatsUseCase
@@ -10,16 +11,14 @@ profile_visit_stats_use_case = ProfileVisitStatsUseCase(repository)
 
 def register_musician():
     data = request.get_json()
-    if not data:
-        return jsonify({"error": "Invalid input"}), 400
     use_case = RegisterMusicianUseCase(repository)
-    musician = use_case.execute(data)
+    try:
+        musician_dict = use_case.execute(data)  # Asegúrate de obtener un diccionario
+        welcome_message = f"Bienvenido a BandConnect, {musician_dict['name']}!"
+        return jsonify({"message": welcome_message}), 201
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
     
-    # Enviar mensaje a RabbitMQ
-    send_to_rabbitmq('musician_created', {'musician': musician.to_dict()})
-    
-    return jsonify({"message": "Músico registrado exitosamente"}), 201
-
 def find_musician_by_id(musician_id):
     use_case = FindMusicianByIdUseCase(repository)
     response = use_case.execute(musician_id)
@@ -28,7 +27,6 @@ def find_musician_by_id(musician_id):
     record_visit_use_case = RecordProfileVisitUseCase(repository)
     record_visit_use_case.execute(musician_id)
     
-    # Enviar mensaje a RabbitMQ
     send_to_rabbitmq('musician_requests', {'musician_id': musician_id})
     
     return jsonify(response)
@@ -42,7 +40,6 @@ def login_musician():
     use_case = LoginMusicianUseCase(repository)
     response = use_case.execute(email, password)
     
-    # Enviar mensaje a RabbitMQ
     send_to_rabbitmq('login_requests', {'email': email, 'password': password})
     
     return jsonify(response)
