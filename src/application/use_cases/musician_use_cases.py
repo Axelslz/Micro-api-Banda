@@ -7,7 +7,6 @@ class RegisterMusicianUseCase:
         self.repository = repository
 
     def execute(self, data: dict) -> dict:
-        # Verifica si ya existe un músico con el mismo email
         existing_musician = self.repository.find_by_email(data['email'])
         if existing_musician:
             raise ValueError(f"El músico con el correo electrónico {data['email']} ya existe")

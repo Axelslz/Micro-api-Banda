@@ -11,7 +11,7 @@ def send_to_rabbitmq(queue_name, message):
             routing_key=queue_name,
             body=json.dumps(message),
             properties=pika.BasicProperties(
-                delivery_mode=2,  # make message persistent
+                delivery_mode=2,  
             )
         )
         print(f"Mensaje enviado a la cola {queue_name}: {json.dumps(message)}")

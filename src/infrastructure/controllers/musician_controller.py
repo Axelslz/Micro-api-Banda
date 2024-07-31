@@ -13,7 +13,7 @@ def register_musician():
     data = request.get_json()
     use_case = RegisterMusicianUseCase(repository)
     try:
-        musician_dict = use_case.execute(data)  # Asegúrate de obtener un diccionario
+        musician_dict = use_case.execute(data) 
         welcome_message = f"Bienvenido a BandConnect, {musician_dict['name']}!"
         return jsonify({"message": welcome_message}), 201
     except ValueError as e:

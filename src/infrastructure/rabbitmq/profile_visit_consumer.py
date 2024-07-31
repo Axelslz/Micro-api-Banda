@@ -42,7 +42,7 @@ def process_message(ch, method, properties, body):
                     routing_key='profile_visit_stats_responses',
                     body=json.dumps(response_message),
                     properties=pika.BasicProperties(
-                        delivery_mode=2,  # make message persistent
+                        delivery_mode=2,  
                     )
                 )
                 print(f"Respuesta enviada a la cola profile_visit_stats_responses: {json.dumps(response_message)}")
