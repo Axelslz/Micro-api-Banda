@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, send_file
 from src.domain.entities.musician import Musician
 from src.application.use_cases.musician_use_cases import RegisterMusicianUseCase, FindMusicianByIdUseCase
 from src.application.use_cases.login_use_case import LoginMusicianUseCase
@@ -44,12 +44,12 @@ def login_musician():
     
     return jsonify(response)
 
-
 def get_profile_visit_stats(musician_id):
-    send_to_rabbitmq('profile_visit_stats_requests', {'musician_id': musician_id})
-    stats = receive_from_rabbitmq('profile_visit_stats_responses')
-    
-    if stats is None:
-        return jsonify({"error": "No se recibieron datos de visitas"}), 500
-    
+    use_case = GetProfileVisitStatsUseCase(repository)
+    stats = use_case.execute(musician_id)
     return jsonify(stats)
+
+def get_profile_visit_stats_and_graph(musician_id):
+    use_case = GetProfileVisitStatsUseCase(repository)
+    response = use_case.execute(musician_id)
+    return jsonify(response), 200

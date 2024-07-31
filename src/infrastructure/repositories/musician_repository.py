@@ -16,10 +16,17 @@ class MusicianRepositoryImpl(MusicianRepository):
         return db.session.query(Musician).filter_by(email=email).first()
     
     def record_profile_visit(self, musician_id):
-        visit = ProfileVisit(musician_id=musician_id, timestamp=datetime.datetime.now())
+        visit = ProfileVisit(musician_id=musician_id)
         db.session.add(visit)
         db.session.commit()
 
     def get_profile_visits(self, musician_id):
-        visits = db.session.query(ProfileVisit.timestamp).filter_by(musician_id=musician_id).all()
-        return [visit.timestamp.isoformat() for visit in visits]
+        visits = ProfileVisit.query.filter_by(musician_id=musician_id).all()
+        return [visit.timestamp for visit in visits]
+
+    def get_last_profile_visit(self, musician_id):
+        return ProfileVisit.query.filter_by(musician_id=musician_id).order_by(ProfileVisit.timestamp.desc()).first()
+
+    def update(self, profile_visit):
+        db.session.add(profile_visit)
+        db.session.commit()

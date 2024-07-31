@@ -6,21 +6,21 @@ from src.infrastructure.database.mysql.connection import db
 class Musician(db.Model):
     __tablename__ = 'musicians'
     
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
-    email = Column(String(50), unique=True, nullable=False)
+    email = Column(String(100), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
-    phone = Column(String(20), nullable=True)
-    location = Column(String(100), nullable=True)
-    description = Column(String(255), nullable=True)
-    repertoire = Column(String(255), nullable=True)
-    experience = Column(Integer, nullable=False, default=0)
-    videos = Column(String(255), nullable=True)
-    photos = Column(String(255), nullable=True)
-    contact_name = Column(String(50), nullable=False)
-    contact_email = Column(String(50), nullable=False)
-    contact_phone = Column(String(20), nullable=True)
-    social_links = Column(String(255), nullable=True)
+    phone = Column(String(20))
+    location = Column(String(100))
+    description = Column(String(255))
+    repertoire = Column(String(255))
+    experience = Column(Integer)
+    videos = Column(String(255))
+    photos = Column(String(255))
+    contact_name = Column(String(50))
+    contact_email = Column(String(100))
+    contact_phone = Column(String(20))
+    social_links = Column(String(255))
 
     def to_dict(self):
         return {
