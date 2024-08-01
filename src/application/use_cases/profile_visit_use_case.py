@@ -3,6 +3,15 @@ from src.infrastructure.repositories.musician_repository import MusicianReposito
 import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime, timedelta
+import cloudinary
+import cloudinary.uploader
+
+# Configura tus credenciales de Cloudinary
+cloudinary.config(
+  cloud_name='dvjjpeyzh',
+  api_key='979357941973196',
+  api_secret='OjpMoSrTxPaEPVUExisKHGj3Eak'
+)
 
 
 class RecordProfileVisitUseCase:
@@ -61,6 +70,10 @@ class GetProfileVisitStatsUseCase:
         # Guardar la gráfica en la carpeta
         graph_path = os.path.join(graphics_folder, 'profile_visit_trends.png')
         plt.savefig(graph_path)
+
+         # Subir la imagen a Cloudinary
+        upload_result = cloudinary.uploader.upload(graph_path, folder="graficasBand")
+        graph_url = upload_result['secure_url']
 
         # Generar recomendaciones
         if prediction < weekly_visits.mean():
